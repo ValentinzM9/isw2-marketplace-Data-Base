@@ -1,0 +1,37 @@
+name: Validación de scripts SQL
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  validate-sql:
+    name: Verificar scripts SQL
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Verificar archivos SQL
+        run: |
+          files=(
+            "database/sql/01_create_tables.sql"
+            "database/sql/02_primary_unique_constraints.sql"
+            "database/sql/03_indexes.sql"
+            "database/sql/04_foreign_keys.sql"
+          )
+
+          for file in "${files[@]}"; do
+            if [ ! -s "$file" ]; then
+              echo "ERROR: El archivo no existe o está vacío: $file"
+              exit 1
+            fi
+
+            echo "OK: $file"
+          done
+
+          echo "Todos los scripts SQL están presentes."
