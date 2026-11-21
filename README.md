@@ -71,3 +71,8 @@ Se aplican las siguientes prácticas:
 - **Separación de esquemas** por dominio funcional cuando sea necesario.
 
 ---
+## Integrantes
+
+- Sophia Mateus Ruiz
+- Anderson Oswaldo Gamba Cubillos
+- Camila Valentina Martínez Cantor
