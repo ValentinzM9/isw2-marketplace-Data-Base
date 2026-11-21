@@ -7,6 +7,9 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   validate-sql:
     name: Verificar scripts SQL
@@ -14,24 +17,29 @@ jobs:
 
     steps:
       - name: Descargar repositorio
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
-      - name: Verificar archivos SQL
+      - name: Verificar scripts SQL
         run: |
           files=(
-            "database/sql/01_create_tables.sql"
-            "database/sql/02_primary_unique_constraints.sql"
-            "database/sql/03_indexes.sql"
-            "database/sql/04_foreign_keys.sql"
+            "01_create_tables.sql"
+            "02_primary_unique_constraints.sql"
+            "03_indexes.sql"
+            "04_foreign_keys.sql"
           )
 
           for file in "${files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "::error::No se encontró el archivo: $file"
+              exit 1
+            fi
+
             if [ ! -s "$file" ]; then
-              echo "ERROR: El archivo no existe o está vacío: $file"
+              echo "::error::El archivo está vacío: $file"
               exit 1
             fi
 
             echo "OK: $file"
           done
 
-          echo "Todos los scripts SQL están presentes."
+          echo "Todos los scripts SQL fueron verificados correctamente."
